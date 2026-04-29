@@ -61,7 +61,7 @@ if(req.url.startsWith("/users/")&&req.method=="GET"){
         res.end(JSON.stringify({ message: "User Not Found" }));
     }
 }
-else if(req.url=="/changePassword"&&req.method=="PUT"){
+ if(req.url=="/changePassword"&&req.method=="PUT"){
     let user="";
     req.on('data',(chunk)=>{
         user+=chunk;
@@ -86,6 +86,27 @@ else if(req.url=="/changePassword"&&req.method=="PUT"){
     })
 
 }
+ if(req.url.startsWith("/update/")&&req.method=="PUT")
+{
+    var username=req.url.split("/")[2];
+    var index=userslist.findIndex((u)=>u.username==username);
+    let newuser="";
+    req.on('data',(chunk)=>{
+        newuser+=chunk;
+    })
+    req.on('end',()=>{
+        if(index!=-1){
+        userslist.splice(index,1,JSON.parse(newuser));
+        res.end("users values are Updated");
+        }
+        else{
+            res.end("user not found")
+
+        }
+    })
+}
+
+
  
 })
 var port=3000;
